@@ -1,0 +1,37 @@
+{
+	"scene":{
+		"objects":[
+			{
+				"shape":"fractal",
+				"color":"red",
+				"center":[0,0,15],
+				"sides":[4,4,4],
+				"direction":[0,1,0]
+			}
+		],
+		"lighting":[
+			{
+				"type":"point",
+				"intensity":0.6,
+				"center":[1,1,-5]
+			},
+			{
+				"type":"point",
+				"intensity":0.6,
+				"center":[5,0,2]
+			},
+			{
+				"type":"ambient",
+				"intensity":0.2
+			}
+		],
+		"camera":{
+			"center":[0,0,0],
+			"direction":[0,0,0]
+		},
+		"physics":{
+			"reflection depth":3,
+			"pixel division":1
+		}
+	}
+}
