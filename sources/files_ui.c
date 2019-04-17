@@ -91,21 +91,80 @@ static void dirent_read(kiss_textbox *textbox1, kiss_vscrollbar *vscrollbar1)
     text_reset(textbox1, vscrollbar1);
 }
 
+static void textbox1_event(kiss_textbox *textbox, SDL_Event *e,
+	kiss_vscrollbar *vscrollbar1, int *draw)
+{
+	int index;
+
+	if (kiss_textbox_event(textbox, e, draw)) 
+    {
+		index = textbox->firstline + textbox->selectedline;
+		if (strcmp((char *) kiss_array_data(textbox->array, index), "")) 
+        {
+			textbox->selectedline = -1;
+			kiss_chdir((char *) kiss_array_data(textbox->array, index));
+			dirent_read(textbox, vscrollbar1);
+			*draw = 1;
+		}
+	}
+}
+
+static void button_ok2_event(kiss_button *button, SDL_Event *e,
+	kiss_window *window1, kiss_window *window2,
+	kiss_progressbar *progressbar, int *draw)
+{
+	if (kiss_button_event(button, e, draw)) {
+		window2->visible = 0;
+		window1->focus = 1;
+		button->prelight = 0;
+		progressbar->fraction = 0.;
+		progressbar->run = 0;
+		*draw = 1;
+	}
+}
+
+static void button_ok1_event(kiss_button *button, SDL_Event *e,
+	kiss_window *window1, kiss_window *window2,
+	kiss_progressbar *progressbar, int *draw)
+{
+	char buf[KISS_MAX_LENGTH];
+
+	if (kiss_button_event(button, e, draw)) {
+/* 		kiss_string_copy(buf, kiss_maxlength(kiss_textfont,
+			window2->rect.w - 2 * kiss_vslider.w,
+			label_sel->text, entry->text),
+			label_sel->text, entry->text);
+		kiss_string_copy(label_res->text, KISS_MAX_LABEL, 
+			"The following path was selected:\n", buf); */
+		window2->visible = 1;
+		window2->focus = 1;
+		window1->focus = 0;
+		button->prelight = 0;
+		progressbar->fraction = 0.;
+		progressbar->run = 1;
+		*draw = 1;
+	}
+}
 
 int files_ui(t_rt *rt, t_sdl *sdl)
 {
     SDL_Renderer *renderer;
     SDL_Event e;
     kiss_array objects;
-    kiss_window window;
+    kiss_window window, window2;;
     kiss_label label = {0}, label1 = {0};
     kiss_textbox textbox1 = {0};
     kiss_button button = {0};
     kiss_button button2 = {0};
     kiss_button button3 = {0};
+    kiss_button button_ok1 = {0};
+    kiss_button button_ok2 = {0};
     kiss_vscrollbar vscrollbar1 = {0};
+    kiss_progressbar progressbar = {0};
     int textbox_width = 250;
 	int textbox_height = 250;
+    int window2_width = 200;
+	int window2_height = 168;
     char message[KISS_MAX_LENGTH];
     int draw, quit;
     quit = 0;
@@ -137,6 +196,20 @@ int files_ui(t_rt *rt, t_sdl *sdl)
                     window.rect.w / 2 - kiss_normal.w / 2 - 20, label.rect.y +100 + kiss_textfont.fontheight + kiss_normal.h);
     kiss_button_new(&button3, &window, "hide ",
                     window.rect.w / 2 - kiss_normal.w / 2 - 20, label.rect.y + 150 + kiss_textfont.fontheight + kiss_normal.h);
+    kiss_button_new(&button_ok1, &window, "render",
+                    window.rect.w / 2 - kiss_normal.w / 2 - 20, label.rect.y +200 + kiss_textfont.fontheight + kiss_normal.h);
+
+    kiss_window_new(&window2, NULL, 1, kiss_screen_width / 2 -
+		window2_width / 2, kiss_screen_height / 2 -
+		window2_height / 2, window2_width, window2_height);
+    kiss_progressbar_new(&progressbar, &window2, window2.rect.x +
+		kiss_up.w - kiss_edge, window2.rect.y + window2.rect.h / 2 -
+		kiss_bar.h / 2 - kiss_border, 160);
+    kiss_button_new(&button_ok2, &window2, "OK", window2.rect.x +
+		window2.rect.w / 2 - kiss_normal.w / 2,
+		progressbar.rect.y + progressbar.rect.h +
+		2 * kiss_vslider.h);
+
     window.visible = 1;
     dirent_read(&textbox1, &vscrollbar1);
     while (!quit)
@@ -146,20 +219,27 @@ int files_ui(t_rt *rt, t_sdl *sdl)
         {
             if (e.type == SDL_QUIT)
                 quit = 1;
+            kiss_window_event(&window2, &e, &draw);
             kiss_window_event(&window, &e, &draw);
             vscrollbar1_event(&vscrollbar1, &e, &textbox1,
 				&draw);
+            textbox1_event(&textbox1, &e, &vscrollbar1, &draw);
             button_event(&button, &e, &draw, &quit, rt, sdl);
             button_event2(&button2, &e, &draw, &quit, rt, sdl);
             button_event3(&button3, &e, &draw, &quit, rt, sdl);
+			button_ok1_event(&button_ok1, &e, &window, &window2, &progressbar,
+				&draw);
+            button_ok2_event(&button_ok2, &e, &window, &window2,
+				&progressbar, &draw);
         }
 
         vscrollbar1_event(&vscrollbar1, NULL, &textbox1, &draw);
-
+        kiss_progressbar_event(&progressbar, NULL, &draw);
 
         if (!draw)
             continue;
         SDL_RenderClear(renderer);
+
         kiss_window_draw(&window, renderer);
         kiss_label_draw(&label, renderer);
         kiss_textbox_draw(&textbox1, renderer);
@@ -167,6 +247,12 @@ int files_ui(t_rt *rt, t_sdl *sdl)
         kiss_button_draw(&button, renderer);
         kiss_button_draw(&button2, renderer);
         kiss_button_draw(&button3, renderer);
+        kiss_button_draw(&button_ok1, renderer);
+
+        kiss_window_draw(&window2, renderer);
+		kiss_progressbar_draw(&progressbar, renderer);
+        kiss_button_draw(&button_ok2, renderer);
+
         SDL_RenderPresent(renderer);
         draw = 0;
     }
