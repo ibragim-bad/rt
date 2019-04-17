@@ -32,6 +32,66 @@ void button_event3(kiss_button *button, SDL_Event *e, int *draw,
 	}
 }
 
+static void vscrollbar1_event(kiss_vscrollbar *vscrollbar, SDL_Event *e,
+	kiss_textbox *textbox1, int *draw)
+{
+	int firstline;
+
+	if (kiss_vscrollbar_event(vscrollbar, e, draw) &&
+		textbox1->array->length - textbox1->maxlines > 0) {
+		firstline = (int) ((textbox1->array->length - 
+			textbox1->maxlines) * vscrollbar->fraction + 0.5);
+		if (firstline >= 0) textbox1->firstline = firstline;
+		*draw = 1;
+	}
+}
+
+
+static void text_reset(kiss_textbox *textbox, kiss_vscrollbar *vscrollbar)
+{
+	qsort(textbox->array->data, textbox->array->length, sizeof(void *),
+		kiss_string_compare);
+	vscrollbar->step = 0.;
+	if (textbox->array->length - textbox->maxlines > 0)
+		vscrollbar->step = 1. / (textbox->array->length -
+			textbox->maxlines);
+	textbox->firstline = 0;
+	textbox->highlightline = -1;
+	vscrollbar->fraction = 0.;
+}
+
+/* Read directory entries into the textboxes */
+static void dirent_read(kiss_textbox *textbox1, kiss_vscrollbar *vscrollbar1)
+{
+	kiss_dirent *ent;
+	kiss_stat s;
+	kiss_dir *dir;
+	char buf[KISS_MAX_LENGTH], ending[2];
+
+	//kiss_array_free(textbox1->array);
+	kiss_array_new(textbox1->array);
+	kiss_getcwd(buf, KISS_MAX_LENGTH);
+	strcpy(ending, "/");
+	//if (buf[0] == 'C') strcpy(ending, "\\");
+	//if (!strcmp(buf, "/") || !strcmp(buf, "C:\\")) strcpy(ending, "");
+/* 	kiss_string_copy(label_sel->text, (2 * textbox1->rect.w +
+		2 * kiss_up.w) / kiss_textfont.advance, buf, ending); */
+	dir = kiss_opendir(".");
+	while ((ent = kiss_readdir(dir))) {
+		if (!ent->d_name) continue;
+		kiss_getstat(ent->d_name, &s);
+ 		if (kiss_isdir(s))
+			kiss_array_appendstring(textbox1->array, 0,
+				ent->d_name, "/"); 
+		if (kiss_isreg(s))
+			kiss_array_appendstring(textbox1->array, 0,
+				ent->d_name, NULL);
+	}
+	kiss_closedir(dir);
+    text_reset(textbox1, vscrollbar1);
+}
+
+
 int files_ui(t_rt *rt, t_sdl *sdl)
 {
     SDL_Renderer *renderer;
@@ -43,6 +103,7 @@ int files_ui(t_rt *rt, t_sdl *sdl)
     kiss_button button = {0};
     kiss_button button2 = {0};
     kiss_button button3 = {0};
+    kiss_vscrollbar vscrollbar1 = {0};
     int textbox_width = 250;
 	int textbox_height = 250;
     char message[KISS_MAX_LENGTH];
@@ -66,8 +127,10 @@ int files_ui(t_rt *rt, t_sdl *sdl)
 
     kiss_textbox_new(&textbox1, &window, 1, &objects, 30,
 		3 * kiss_normal.h, textbox_width, textbox_height);
-    
 
+    kiss_vscrollbar_new(&vscrollbar1, &window, textbox1.rect.x +
+		textbox_width, textbox1.rect.y, textbox_height);
+    
     kiss_button_new(&button, &window, "1 sphr",
                     window.rect.w / 2 - kiss_normal.w / 2 - 20, label.rect.y +50+ kiss_textfont.fontheight + kiss_normal.h);
     kiss_button_new(&button2, &window, "2 sphr",
@@ -75,7 +138,7 @@ int files_ui(t_rt *rt, t_sdl *sdl)
     kiss_button_new(&button3, &window, "hide ",
                     window.rect.w / 2 - kiss_normal.w / 2 - 20, label.rect.y + 150 + kiss_textfont.fontheight + kiss_normal.h);
     window.visible = 1;
-    
+    dirent_read(&textbox1, &vscrollbar1);
     while (!quit)
     {
         SDL_Delay(10);
@@ -84,16 +147,23 @@ int files_ui(t_rt *rt, t_sdl *sdl)
             if (e.type == SDL_QUIT)
                 quit = 1;
             kiss_window_event(&window, &e, &draw);
+            vscrollbar1_event(&vscrollbar1, &e, &textbox1,
+				&draw);
             button_event(&button, &e, &draw, &quit, rt, sdl);
             button_event2(&button2, &e, &draw, &quit, rt, sdl);
             button_event3(&button3, &e, &draw, &quit, rt, sdl);
         }
+
+        vscrollbar1_event(&vscrollbar1, NULL, &textbox1, &draw);
+
+
         if (!draw)
             continue;
         SDL_RenderClear(renderer);
         kiss_window_draw(&window, renderer);
         kiss_label_draw(&label, renderer);
         kiss_textbox_draw(&textbox1, renderer);
+        kiss_vscrollbar_draw(&vscrollbar1, renderer);
         kiss_button_draw(&button, renderer);
         kiss_button_draw(&button2, renderer);
         kiss_button_draw(&button3, renderer);
