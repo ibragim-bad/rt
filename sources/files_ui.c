@@ -38,10 +38,13 @@ int files_ui(t_rt *rt, t_sdl *sdl)
     SDL_Event e;
     kiss_array objects;
     kiss_window window;
-    kiss_label label = {0};
+    kiss_label label = {0}, label1 = {0};
+    kiss_textbox textbox1 = {0};
     kiss_button button = {0};
     kiss_button button2 = {0};
     kiss_button button3 = {0};
+    int textbox_width = 250;
+	int textbox_height = 250;
     char message[KISS_MAX_LENGTH];
     int draw, quit;
     quit = 0;
@@ -57,14 +60,22 @@ int files_ui(t_rt *rt, t_sdl *sdl)
                    window.rect.w / 2 - strlen(message) *
                                            kiss_textfont.advance / 2,
                    window.rect.h / 2 - (kiss_textfont.fontheight + 2 * kiss_normal.h) / 2);
+    kiss_label_new(&label1, &window, "Files", textbox1.rect.x +
+		kiss_edge, textbox1.rect.y - kiss_textfont.lineheight);
     label.textcolor.r = 255;
-    kiss_button_new(&button, &window, "1 sphere",
-                    window.rect.w / 2 - kiss_normal.w / 2 - 20, label.rect.y + kiss_textfont.fontheight + kiss_normal.h);
-    kiss_button_new(&button2, &window, "2 spheres",
-                    window.rect.w / 2 - kiss_normal.w / 2 - 20, label.rect.y - 50 + kiss_textfont.fontheight + kiss_normal.h);
-    kiss_button_new(&button3, &window, "hide menu",
-                    window.rect.w / 2 - kiss_normal.w / 2 - 20, label.rect.y + 100 + kiss_textfont.fontheight + kiss_normal.h);
+
+    kiss_textbox_new(&textbox1, &window, 1, &objects, 30,
+		3 * kiss_normal.h, textbox_width, textbox_height);
+    
+
+    kiss_button_new(&button, &window, "1 sphr",
+                    window.rect.w / 2 - kiss_normal.w / 2 - 20, label.rect.y +50+ kiss_textfont.fontheight + kiss_normal.h);
+    kiss_button_new(&button2, &window, "2 sphr",
+                    window.rect.w / 2 - kiss_normal.w / 2 - 20, label.rect.y +100 + kiss_textfont.fontheight + kiss_normal.h);
+    kiss_button_new(&button3, &window, "hide ",
+                    window.rect.w / 2 - kiss_normal.w / 2 - 20, label.rect.y + 150 + kiss_textfont.fontheight + kiss_normal.h);
     window.visible = 1;
+    
     while (!quit)
     {
         SDL_Delay(10);
@@ -82,6 +93,7 @@ int files_ui(t_rt *rt, t_sdl *sdl)
         SDL_RenderClear(renderer);
         kiss_window_draw(&window, renderer);
         kiss_label_draw(&label, renderer);
+        kiss_textbox_draw(&textbox1, renderer);
         kiss_button_draw(&button, renderer);
         kiss_button_draw(&button2, renderer);
         kiss_button_draw(&button3, renderer);
