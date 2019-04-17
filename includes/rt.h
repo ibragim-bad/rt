@@ -53,33 +53,39 @@ typedef struct		s_trace
 	double			d;
 }					t_trace;
 
-typedef struct		s_rt_ui
+typedef struct		s_rtui
 {
 	SDL_Renderer	*renderer;
 	SDL_Event		e;
 	kiss_array		objects;
-	kiss_window		window;
-	kiss_button		button;
+	kiss_window		window1, window2;
 	char			*message;
 	char			*message2;
-	char			*message3;
-	char			*message4;
 	int				draw;
 	int				quit;
 	char			*title;
 	int				textbox_width;
+	int				textbox_height;
+	int				window2_width;
+	int				window2_height;
 	kiss_label		label;
 	kiss_label		label0;
 	kiss_label		label1;
 	kiss_label		label2;
-	kiss_label		label3;
-	kiss_label		label4;
-	kiss_entry		entry0;
+	kiss_label		label_sel;
+	kiss_label		label_res;
+	kiss_entry		entry;
 	kiss_entry		entry1;
-	kiss_entry		entry2;
-	kiss_entry		entry3;
+	kiss_button 	button;
+	kiss_button 	button2;
+	kiss_button 	button3;
+	kiss_button 	button_ok1;
+	kiss_button 	button_ok2;
+	kiss_vscrollbar vscrollbar1;
+	kiss_vscrollbar vscrollbar2;
+	kiss_progressbar progressbar;
 	kiss_textbox	textbox1;
-}					t_map_ui;
+}					t_rtui;
 
 typedef struct		s_rt
 {
