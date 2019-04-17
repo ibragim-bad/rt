@@ -30,12 +30,12 @@ SDL =  -F includes/frameworks/ -framework SDL2 \
 -framework SDL2_ttf \
 -framework SDL2_mixer
 
-FLAGS = -O2 -g -Wall -Wextra #-Werror
+FLAGS = # -O2 -g -Wall -Wextra -Werror
 
-INCLUDES = -I includes/frameworks/SDL2.framework/Versions/A/Headers \
+INCLUDES = -I includes -I libft -I kiss_sdl -I includes/frameworks/SDL2.framework/Versions/A/Headers \
 -I includes/frameworks/SDL2_image.framework/Versions/A/Headers \
 -I includes/frameworks/SDL2_ttf.framework/Versions/A/Headers \
--I includes/frameworks/SDL2_mixer.framework/Versions/A/Headers  -I includes -I libft -I kiss_sdl
+-I includes/frameworks/SDL2_mixer.framework/Versions/A/Headers 
 
 SRC = main.c\
 	  event_handler.c\
@@ -73,9 +73,11 @@ SRC = main.c\
 	  noise.c\
 	  wood.c\
 	  chess_board.c\
-	  marble.c
+	  marble.c\
+	  ui_rt.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
+SRC_LIN = $(addprefix $(SRC_DIR)/, $(SRC))
 
 RED=\033[0;31m
 GREEN=\033[0;32m
@@ -83,6 +85,16 @@ BLUE=\033[0;34m
 NC=\033[0m
 
 all: $(NAME)
+
+FLAGS_LINUX =  -I ./includes/ ./kiss_sdl/libkisssdl.a -I ./includes/frameworks/SDL2_ttf.framework/Versions/A/Headers \
+ 	-I ./includes/frameworks/SDL2_image.framework/Versions/A/Headers \
+	 -I ./kiss_sdl -I ./libft -lm -lpthread -lSDL2main -lSDL2  -lSDL2_ttf -lSDL2_image
+
+#linux: #$(LIBFT) $(KISS_SDL) #$(OBJ)
+#	sudo gcc $(FLAGS) $(OBJ) $(LIBFT) $(FLAGS_LINUX) -o $(NAME)
+
+linux:
+	sudo gcc $(FLAGS) $(SRC_LIN) $(LIBFT) $(FLAGS_LINUX) -o $(NAME)
 
 $(NAME): $(LIBFT) $(KISS_SDL) $(OBJ)
 	@echo "$(BLUE)Compiling RT...$(NC)"

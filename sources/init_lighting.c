@@ -119,8 +119,8 @@ void			init_lighting(char *s, t_light **head)
 		get_intensity(object, new);
 		if (new->type == POINT || new->type == DIRECTIONAL || new->type == SPOT)
 			get_coordinates(object, new);
-		free(object);
 		s += ft_strlen(object);
+		free(object);
 		push_back_light(head, new);
 	}
 }

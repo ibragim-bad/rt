@@ -19,7 +19,7 @@
   3. This notice may not be removed or altered from any source
      distribution.
 
-  kiss_sdl version 1.2.0
+  kiss_sdl version 1.2.4
 */
 
 #include "kiss_sdl.h"
@@ -155,7 +155,7 @@ int kiss_font_new(kiss_font *font, char *fname, kiss_array *a, int size)
 
 	if (!font || !fname) return -1;
 	kiss_string_copy(buf, KISS_MAX_LENGTH, RESDIR, fname);
-	if (!(font->font = TTF_OpenFont(buf, size))) {
+	if (!(font->font = TTF_OpenFont(buf, 25))) {
 		fprintf(stderr, "Cannot load font %s\n", fname);
 		return -1;
 	}
@@ -178,7 +178,7 @@ SDL_Renderer* kiss_init(char* title, kiss_array *a, int w, int h)
 	int r;
 
 	r = 0;
-	SDL_Init(SDL_INIT_EVERYTHING);
+	//SDL_Init(SDL_INIT_EVERYTHING);
 	SDL_GetDisplayBounds(0, &srect);
 	if (!a || w > srect.w || h > srect.h) {
 		SDL_Quit();
@@ -188,7 +188,6 @@ SDL_Renderer* kiss_init(char* title, kiss_array *a, int w, int h)
 	kiss_screen_height = h;
 	IMG_Init(IMG_INIT_PNG);
 	TTF_Init();
-	SDL_StartTextInput();
 	kiss_array_new(a);
 	window = SDL_CreateWindow(title, srect.w / 2 - w / 2,
 		srect.h / 2 - h / 2, w, h, SDL_WINDOW_SHOWN);
@@ -196,23 +195,23 @@ SDL_Renderer* kiss_init(char* title, kiss_array *a, int w, int h)
 	renderer = SDL_CreateRenderer(window, -1,
 		SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (renderer) kiss_array_append(a, RENDERER_TYPE, renderer);
-	r += kiss_font_new(&kiss_textfont, "kiss_font.ttf", a,
-		kiss_textfont_size);
-	r += kiss_font_new(&kiss_buttonfont, "kiss_font.ttf", a,
-		kiss_buttonfont_size);
-	r += kiss_image_new(&kiss_normal, "kiss_normal.png", a, renderer);
-	r += kiss_image_new(&kiss_prelight, "kiss_prelight.png", a, renderer);
-	r += kiss_image_new(&kiss_active, "kiss_active.png", a, renderer);
-	r += kiss_image_new(&kiss_bar, "kiss_bar.png", a, renderer);
-	r += kiss_image_new(&kiss_vslider, "kiss_vslider.png", a, renderer);
-	r += kiss_image_new(&kiss_hslider, "kiss_hslider.png", a, renderer);
-	r += kiss_image_new(&kiss_up, "kiss_up.png", a, renderer);
-	r += kiss_image_new(&kiss_down, "kiss_down.png", a, renderer);
-	r += kiss_image_new(&kiss_left, "kiss_left.png", a, renderer);
-	r += kiss_image_new(&kiss_right, "kiss_right.png", a, renderer);
-	r += kiss_image_new(&kiss_combo, "kiss_combo.png", a, renderer);
-	r += kiss_image_new(&kiss_selected, "kiss_selected.png", a, renderer);
-	r += kiss_image_new(&kiss_unselected, "kiss_unselected.png", a,
+	r += kiss_font_new(&kiss_textfont, "./kiss_sdl/kiss_font.ttf", a,
+		25);
+	r += kiss_font_new(&kiss_buttonfont, "./kiss_sdl/kiss_font.ttf", a,
+		100);
+	r += kiss_image_new(&kiss_normal, "./kiss_sdl/kiss_normal.png", a, renderer);
+	r += kiss_image_new(&kiss_prelight, "./kiss_sdl/kiss_prelight.png", a, renderer);
+	r += kiss_image_new(&kiss_active, "./kiss_sdl/kiss_active.png", a, renderer);
+	r += kiss_image_new(&kiss_bar, "./kiss_sdl/kiss_bar.png", a, renderer);
+	r += kiss_image_new(&kiss_vslider, "./kiss_sdl/kiss_vslider.png", a, renderer);
+	r += kiss_image_new(&kiss_hslider, "./kiss_sdl/kiss_hslider.png", a, renderer);
+	r += kiss_image_new(&kiss_up, "./kiss_sdl/kiss_up.png", a, renderer);
+	r += kiss_image_new(&kiss_down, "./kiss_sdl/kiss_down.png", a, renderer);
+	r += kiss_image_new(&kiss_left, "./kiss_sdl/kiss_left.png", a, renderer);
+	r += kiss_image_new(&kiss_right, "./kiss_sdl/kiss_right.png", a, renderer);
+	r += kiss_image_new(&kiss_combo, "./kiss_sdl/kiss_combo.png", a, renderer);
+	r += kiss_image_new(&kiss_selected, "./kiss_sdl/kiss_selected.png", a, renderer);
+	r += kiss_image_new(&kiss_unselected, "./kiss_sdl/kiss_unselected.png", a,
 		renderer);
 	if (r) {
 		kiss_clean(a);
@@ -250,7 +249,7 @@ int kiss_clean(kiss_array *a)
 	kiss_array_free(a);
 	TTF_Quit();
 	IMG_Quit();
-	SDL_Quit();
+	//SDL_Quit();
 	return 0;
 }
 

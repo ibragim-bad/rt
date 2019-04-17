@@ -16,15 +16,16 @@
 # include "libft.h"
 # include "vector.h"
 # include "constants.h"
-# include <SDL.h>
+# include <SDL2/SDL.h>
 # include <SDL_image.h>
 # include <SDL_ttf.h>
-# include <SDL_mixer.h>
+# include "kiss_sdl.h"
 # include "shape.h"
 # include <math.h>
 # include <limits.h>
 # include <fcntl.h>
 # include <stdio.h>
+#include <time.h> 
 
 typedef struct		s_sdl
 {
@@ -166,5 +167,8 @@ double				turbulence(double x, double y, double size);
 int					noise(double x, double y);
 int					wood(int x, int y);
 int					chess_board(int x, int y);
+
+void 	init_rt(t_rt *rt, char *config_file);
+int					files_ui(t_rt *rt, t_sdl *sdl);
 
 #endif
