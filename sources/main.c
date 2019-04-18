@@ -124,19 +124,20 @@ int main(int args, char **argv)
 	t_sdl sdl;
 
 	srand48(time(NULL));
-	if (args != 2)
+	if (args != 1)
 	{
-		ft_putstr("\033[0;31musage: ./RTv1 [configuration_file]\n");
+		ft_putstr("\033[0;31musage: ./RTv1");
 		return (1);
 	}
 	generateNoise();
-	//init_rt(&rt, argv[1]);
+	//init_rt(&rt, "parser/sph2.json");
+	rt.win_width = 0;
 	if (init_sdl(&sdl))
 		return (1);
 	//create_img(&rt, &sdl);
 	//rt_menu();
 
-	files_ui(&rt, &sdl);
+	ui_main(&rt, &sdl);
 /* 	while (1)
 	{
 		SDL_UpdateWindowSurface(sdl.win);

@@ -10,8 +10,10 @@ void	ui_init_2(t_rtui *ui)
 	kiss_label_new(&ui->label_sel, &ui->window1, "Choose file", \
 	ui->textbox1.rect.x + kiss_edge, ui->textbox1.rect.y + ui->textbox_height + kiss_normal.h);
 	kiss_button_new(&ui->button3, &ui->window1, "Hide",
-									ui->window1.rect.w / 2 - kiss_normal.w / 2 - 20, 500);
+									ui->window1.rect.w / 2 - kiss_normal.w / 2 - 20, 450);
 	kiss_button_new(&ui->button_ok1, &ui->window1, "render",
+									ui->window1.rect.w / 2 - kiss_normal.w / 2 - 20, 500);
+	kiss_button_new(&ui->button_ex, &ui->window1, "exit",
 									ui->window1.rect.w / 2 - kiss_normal.w / 2 - 20, 550);
 	kiss_window_new(&ui->window2, NULL, 1, kiss_screen_width / 2 - ui->window2_width / 2, kiss_screen_height / 2 - ui->window2_height / 2, ui->window2_width, ui->window2_height);
 	kiss_label_new(&ui->label_res, &ui->window2, "", ui->window2.rect.x +

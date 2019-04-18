@@ -89,6 +89,7 @@ typedef struct		s_rtui
 	kiss_label		label_sel;
 	kiss_label		label_res;
 	kiss_button 	button3;
+	kiss_button 	button_ex;
 	kiss_button 	button_ok1;
 	kiss_button 	button_ok2;
 	kiss_vscrollbar vscrollbar1;
@@ -183,9 +184,9 @@ int					noise(double x, double y);
 int					wood(int x, int y);
 int					chess_board(int x, int y);
 
+int					ui_main(t_rt *rt, t_sdl *sdl);
 void				dirent_read(t_rtui *ui);
 void 				init_rt(t_rt *rt, char *config_file);
-int					files_ui(t_rt *rt, t_sdl *sdl);
 int					kiss_error(void);
 void				ui_init(t_rtui *ui);
 

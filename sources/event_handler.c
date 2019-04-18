@@ -84,7 +84,7 @@ void	event_handler(t_rt *rt, t_sdl *sdl)
 				}
 				create_img(rt, sdl);
 				if (key == SDLK_m)
-					files_ui(rt, sdl);
+					ui_main(rt, sdl);
 			}
 			if (event.window.event == SDL_WINDOWEVENT_RESIZED)
 				window_resized(rt, sdl, &event);
