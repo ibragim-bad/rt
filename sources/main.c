@@ -20,7 +20,7 @@ static int init_sdl(t_sdl *sdl)
 		printf("SDL_Init Error: %s\n", SDL_GetError());
 		return (1);
 	}
-	sdl->win = SDL_CreateWindow("RT", 500, 500, 600, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+	sdl->win = SDL_CreateWindow("RT", 530, 420, 600, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	if (sdl->win == NULL)
 	{
 		printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
@@ -75,6 +75,7 @@ void init_rt(t_rt *rt, char *config_file)
 	rt->head_light = NULL;
 	rt->head_textures = NULL;
 	rt->p_division = 1;
+	//невалидные файлы
 	fd = open(config_file, O_RDONLY);
 	file = get_file(fd);
 	if (init_config(file, rt))
