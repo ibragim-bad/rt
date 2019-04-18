@@ -22,7 +22,7 @@ static int init_sdl(t_sdl *sdl)
 		printf("SDL_Init Error: %s\n", SDL_GetError());
 		return (1);
 	}
-	sdl->win = SDL_CreateWindow("RT", 485, 420, 600, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+	sdl->win = SDL_CreateWindow("RT", 1050, 400, 600, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	if (sdl->win == NULL)
 	{
 		printf("SDL_CreateWindow Error: %s\n", SDL_GetError());

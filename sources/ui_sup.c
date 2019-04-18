@@ -17,7 +17,6 @@ void	ui_min_init(t_rtui_min *min)
 		return ;
 	kiss_window_new(&min->window, NULL, 0, 0, 0, kiss_screen_width,
 					kiss_screen_height);
-	strcpy(min->message, "incorrect file!");
 	kiss_label_new(&min->label, &min->window, min->message, \
 		min->window.rect.w / 2 - strlen(min->message) * \
 		kiss_textfont.advance / 2, \
@@ -30,10 +29,11 @@ void	ui_min_init(t_rtui_min *min)
 	min->window.visible = 1;
 }
 
-int		kiss_error(void)
+int		kiss_error(char *mes)
 {
 	t_rtui_min	min;
 
+	ft_strcpy(min.message, mes);
 	ui_min_init(&min);
 	while (!min.quit)
 	{
@@ -55,5 +55,5 @@ int		kiss_error(void)
 		min.draw = 0;
 	}
 	kiss_clean(&min.objects);
-	return 0;
+	return (0);
 }

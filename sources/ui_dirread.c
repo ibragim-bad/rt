@@ -1,28 +1,27 @@
 #include "kiss_sdl.h"
 #include "rt.h"
 
-static void text_reset(kiss_textbox *textbox, kiss_vscrollbar *vscrollbar)
+static void	text_reset(kiss_textbox *textbox, kiss_vscrollbar *vscrollbar)
 {
 	qsort(textbox->array->data, textbox->array->length, sizeof(void *),
 				kiss_string_compare);
 	vscrollbar->step = 0.;
 	if (textbox->array->length - textbox->maxlines > 0)
 		vscrollbar->step = 1. / (textbox->array->length -
-														 textbox->maxlines);
+		textbox->maxlines);
 	textbox->firstline = 0;
 	textbox->highlightline = -1;
 	vscrollbar->fraction = 0.;
 }
 
-/* Read directory entries into the textboxes */
-void dirent_read(t_rtui *ui)
+void		dirent_read(t_rtui *ui)
 {
-	kiss_dirent *ent;
-	kiss_stat s;
-	kiss_dir *dir;
-	char ending[2];
+	kiss_dirent		*ent;
+	kiss_stat		s;
+	kiss_dir		*dir;
+	char			ending[2];
 
-	//kiss_array_free(textbox1->array);
+	kiss_array_free(ui->textbox1.array);
 	kiss_array_new(ui->textbox1.array);
 	kiss_getcwd(ui->buffer, KISS_MAX_LENGTH);
 	ft_strcpy(ending, "/");
@@ -31,8 +30,8 @@ void dirent_read(t_rtui *ui)
 	dir = kiss_opendir(".");
 	while ((ent = kiss_readdir(dir)))
 	{
-		//if (!ent->d_name)
-		//	continue;
+		if (!ent->d_name)
+			continue;
 		kiss_getstat(ent->d_name, &s);
 		if (kiss_isdir(s))
 			kiss_array_appendstring(ui->textbox1.array, 0, ent->d_name, "/");
