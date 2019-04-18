@@ -92,7 +92,7 @@ typedef struct		s_rtui
 	kiss_button 	button_ok1;
 	kiss_button 	button_ok2;
 	kiss_vscrollbar vscrollbar1;
-	kiss_progressbar progressbar;
+	//kiss_progressbar progressbar;
 	kiss_textbox	textbox1;
 }					t_rtui;
 
