@@ -77,8 +77,8 @@ static void dirent_read(kiss_textbox *textbox1, kiss_vscrollbar *vscrollbar1, ki
 	strcpy(ending, "/");
 	if (ui->buffer[0] == 'C') strcpy(ending, "\\");
 	if (!strcmp(ui->buffer, "/") || !strcmp(ui->buffer, "C:\\")) strcpy(ending, "");
- 	kiss_string_copy(label_sel->text, (2 * textbox1->rect.w +
-		2 * kiss_up.w) / kiss_textfont.advance, ui->buffer, ending); 
+ //	kiss_string_copy(label_sel->text, (2 * textbox1->rect.w +
+//		2 * kiss_up.w) / kiss_textfont.advance, ui->buffer, ending); 
 	dir = kiss_opendir(".");
 	//printf("buffer - %s\n", ui->buffer);
 	while ((ent = kiss_readdir(dir)))
@@ -124,7 +124,7 @@ static void textbox1_event(kiss_textbox *textbox, SDL_Event *e,
 				KISS_MAX_LABEL,
 				(char *) kiss_array_data(textbox->array,
 				index), NULL);
-			printf("buffer - %s\n", ui->file_path);
+			printf("buffer - %s\n", label_sel->text);
 			//printf("kiss_arr - %s\n", (char *)kiss_array_data(textbox->array, index));
 			
 		}
@@ -195,7 +195,7 @@ void	init_ui(t_rtui *ui)
 
 	kiss_vscrollbar_new(&ui->vscrollbar1, &ui->window1, ui->textbox1.rect.x + ui->textbox_width, ui->textbox1.rect.y, ui->textbox_height);
 
-	kiss_label_new(&ui->label_sel, &ui->window1, "Hi", ui->textbox1.rect.x + kiss_edge, ui->textbox1.rect.y + ui->textbox_height + kiss_normal.h);
+	kiss_label_new(&ui->label_sel, &ui->window1, "Choose file", ui->textbox1.rect.x + kiss_edge, ui->textbox1.rect.y + ui->textbox_height + kiss_normal.h);
 	kiss_button_new(&ui->button3, &ui->window1, "hide ",
 									ui->window1.rect.w / 2 - kiss_normal.w / 2 - 20, 500);
 	kiss_button_new(&ui->button_ok1, &ui->window1, "render",
