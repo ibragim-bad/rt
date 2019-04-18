@@ -1,6 +1,6 @@
 C = gcc
 
-NAME = libkisssdl.a
+NAME = kisssdl.a
 
 CFILES = kiss_draw.c \
 		kiss_general.c \

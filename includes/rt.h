@@ -60,6 +60,9 @@ typedef struct		s_rtui
 	kiss_array		objects;
 	kiss_window		window1, window2;
 	char			*message;
+	char			buffer[KISS_MAX_LABEL];
+	char			slash[KISS_MAX_LABEL];
+	char			file_path[KISS_MAX_LABEL];
 	char			*message2;
 	int				draw;
 	int				quit;
@@ -69,7 +72,7 @@ typedef struct		s_rtui
 	int				window2_width;
 	int				window2_height;
 	kiss_label		label;
-	kiss_label		label0;
+	kiss_label		label_buf;
 	kiss_label		label1;
 	kiss_label		label2;
 	kiss_label		label_sel;

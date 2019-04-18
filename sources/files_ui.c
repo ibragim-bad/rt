@@ -64,22 +64,23 @@ static void text_reset(kiss_textbox *textbox, kiss_vscrollbar *vscrollbar)
 }
 
 /* Read directory entries into the textboxes */
-static void dirent_read(kiss_textbox *textbox1, kiss_vscrollbar *vscrollbar1, kiss_label *label_sel)
+static void dirent_read(kiss_textbox *textbox1, kiss_vscrollbar *vscrollbar1, kiss_label *label_sel, t_rtui *ui)
 {
 	kiss_dirent *ent;
 	kiss_stat s;
 	kiss_dir *dir;
-	char buf[KISS_MAX_LENGTH], ending[2];
+	char ending[2];
 
 	//kiss_array_free(textbox1->array);
 	kiss_array_new(textbox1->array);
-	kiss_getcwd(buf, KISS_MAX_LENGTH);
+	kiss_getcwd(ui->buffer, KISS_MAX_LENGTH);
 	strcpy(ending, "/");
-	//if (buf[0] == 'C') strcpy(ending, "\\");
-	//if (!strcmp(buf, "/") || !strcmp(buf, "C:\\")) strcpy(ending, "");
+	if (ui->buffer[0] == 'C') strcpy(ending, "\\");
+	if (!strcmp(ui->buffer, "/") || !strcmp(ui->buffer, "C:\\")) strcpy(ending, "");
  	kiss_string_copy(label_sel->text, (2 * textbox1->rect.w +
-		2 * kiss_up.w) / kiss_textfont.advance, buf, ending); 
+		2 * kiss_up.w) / kiss_textfont.advance, ui->buffer, ending); 
 	dir = kiss_opendir(".");
+	//printf("buffer - %s\n", ui->buffer);
 	while ((ent = kiss_readdir(dir)))
 	{
 		if (!ent->d_name)
@@ -97,7 +98,7 @@ static void dirent_read(kiss_textbox *textbox1, kiss_vscrollbar *vscrollbar1, ki
 }
 
 static void textbox1_event(kiss_textbox *textbox, SDL_Event *e,
-													 kiss_vscrollbar *vscrollbar1,kiss_label *label_sel, int *draw)
+													 kiss_vscrollbar *vscrollbar1,kiss_label *label_sel, int *draw, t_rtui	*ui)
 {
 	int index;
 
@@ -108,8 +109,24 @@ static void textbox1_event(kiss_textbox *textbox, SDL_Event *e,
 		{
 			textbox->selectedline = -1;
 			kiss_chdir((char *)kiss_array_data(textbox->array, index));
-			dirent_read(textbox, vscrollbar1, label_sel);
+			dirent_read(textbox, vscrollbar1, label_sel, ui);
 			*draw = 1;
+
+			//printf("label_text - %s\n", label_sel->text);
+			kiss_string_copy(ui->slash,
+				KISS_MAX_LABEL,
+				ui->buffer, "/");
+			kiss_string_copy(ui->file_path,
+				KISS_MAX_LABEL,
+				ui->slash, (char *)kiss_array_data(textbox->array,
+				index));
+			kiss_string_copy(label_sel->text,
+				KISS_MAX_LABEL,
+				(char *) kiss_array_data(textbox->array,
+				index), NULL);
+			printf("buffer - %s\n", ui->file_path);
+			//printf("kiss_arr - %s\n", (char *)kiss_array_data(textbox->array, index));
+			
 		}
 	}
 }
@@ -132,7 +149,7 @@ static void button_ok2_event(kiss_button *button, SDL_Event *e,
 static void button_ok1_event(kiss_button *button, SDL_Event *e,
 														 kiss_window *window1, kiss_window *window2,
 														 kiss_progressbar *progressbar, kiss_label *label_sel,
-			kiss_entry *entry, kiss_label *label_res, int *draw)
+			kiss_entry *entry, kiss_label *label_res, int *draw, t_rtui *ui, t_rt *rt, t_sdl *sdl)
 {
 	char buf[KISS_MAX_LENGTH];
 
@@ -151,6 +168,8 @@ static void button_ok1_event(kiss_button *button, SDL_Event *e,
 		progressbar->fraction = 0.;
 		progressbar->run = 1;
 		*draw = 1;
+		init_rt(rt, ui->file_path);
+		create_img(rt, sdl);
 	}
 }
 
@@ -193,7 +212,7 @@ void	init_ui(t_rtui *ui)
 									ui->progressbar.rect.y + ui->progressbar.rect.h +
 											2 * kiss_vslider.h);
 		ui->window1.visible = 1;
-	dirent_read(&ui->textbox1, &ui->vscrollbar1, &ui->label_sel);
+	dirent_read(&ui->textbox1, &ui->vscrollbar1, &ui->label_sel, ui);
 }
 
 int files_ui(t_rt *rt, t_sdl *sdl)
@@ -212,13 +231,13 @@ int files_ui(t_rt *rt, t_sdl *sdl)
 			kiss_window_event(&ui.window1, &ui.e, &ui.draw);
 			vscrollbar1_event(&ui.vscrollbar1, &ui.e, &ui.textbox1,
 												&ui.draw);
-			textbox1_event(&ui.textbox1, &ui.e, &ui.vscrollbar1, &ui.label_sel, &ui.draw);
+			textbox1_event(&ui.textbox1, &ui.e, &ui.vscrollbar1, &ui.label_sel, &ui.draw, &ui);
 			/*             button_event(&button, &e, &draw, &quit, rt, sdl);
             button_event2(&button2, &e, &draw, &quit, rt, sdl); */
 			kiss_entry_event(&ui.entry, &ui.e, &ui.draw);
 			button_event3(&ui.button3, &ui.e, &ui.draw, &ui.quit, rt, sdl);
 			button_ok1_event(&ui.button_ok1, &ui.e, &ui.window1, &ui.window2, &ui.progressbar,
-											 &ui.label_sel, &ui.entry, &ui.label_res, &ui.draw);
+											 &ui.label_sel, &ui.entry, &ui.label_res, &ui.draw, &ui, rt, sdl);
 			button_ok2_event(&ui.button_ok2, &ui.e, &ui.window1, &ui.window2,
 											 &ui.progressbar, &ui.draw);
 		}
@@ -239,7 +258,7 @@ int files_ui(t_rt *rt, t_sdl *sdl)
 		kiss_label_draw(&ui.label_sel, ui.renderer);
 		kiss_button_draw(&ui.button3, ui.renderer);
 		kiss_button_draw(&ui.button_ok1, ui.renderer);
-		kiss_entry_draw(&ui.entry, ui.renderer);
+		//kiss_entry_draw(&ui.entry, ui.renderer);
 
 
 		kiss_window_draw(&ui.window2, ui.renderer);
