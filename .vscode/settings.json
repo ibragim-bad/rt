@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "kiss_sdl.h": "c"
+        "kiss_sdl.h": "c",
+        "ratio": "c"
     }
 }

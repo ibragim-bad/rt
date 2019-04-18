@@ -52,11 +52,10 @@ static void dirent_read(kiss_textbox *textbox1, kiss_vscrollbar *vscrollbar1, ki
 	//kiss_array_free(textbox1->array);
 	kiss_array_new(textbox1->array);
 	kiss_getcwd(ui->buffer, KISS_MAX_LENGTH);
-	strcpy(ending, "/");
-	if (ui->buffer[0] == 'C') strcpy(ending, "\\");
-	if (!strcmp(ui->buffer, "/") || !strcmp(ui->buffer, "C:\\")) strcpy(ending, "");
+	ft_strcpy(ending, "/");
+	if (!(ft_strcmp(ui->buffer, "/")))
+		ft_strcpy(ending, "");
 	dir = kiss_opendir(".");
-	//printf("buffer - %s\n", ui->buffer);
 	while ((ent = kiss_readdir(dir)))
 	{
 		if (!ent->d_name)
@@ -81,13 +80,10 @@ static void textbox1_event(kiss_textbox *textbox, SDL_Event *e,
 	if (kiss_textbox_event(textbox, e, draw))
 	{
 		index = textbox->firstline + textbox->selectedline;
-		if (strcmp((char *)kiss_array_data(textbox->array, index), ""))
+		if (ft_strcmp((char *)kiss_array_data(textbox->array, index), ""))
 		{
 			textbox->selectedline = -1;
 			kiss_chdir((char *)kiss_array_data(textbox->array, index));
-			dirent_read(textbox, vscrollbar1, label_sel, ui);
-			*draw = 1;
-
 			kiss_string_copy(ui->slash,
 				KISS_MAX_LABEL,
 				ui->buffer, "/");
@@ -99,7 +95,8 @@ static void textbox1_event(kiss_textbox *textbox, SDL_Event *e,
 				KISS_MAX_LABEL,
 				(char *) kiss_array_data(textbox->array,
 				index), NULL);
-			
+			dirent_read(textbox, vscrollbar1, label_sel, ui);
+			*draw = 1;
 		}
 	}
 }
@@ -127,19 +124,24 @@ static void button_ok1_event(kiss_button *button, SDL_Event *e,
 
 	if (kiss_button_event(button, e, draw))
 	{
+		if (!(ft_strstr(ui->label_sel.text, ".json")))
+		{
+			kiss_error();
+			return ;
+		}
 	/* 		kiss_string_copy(buf, kiss_maxlength(kiss_textfont,
 			window2->rect.w - 2 * kiss_vslider.w,
 			label_sel->text, entry->text),
 			label_sel->text, entry->text); */
 		kiss_string_copy(label_res->text, KISS_MAX_LABEL, 
 			"Wait\n", ""); 
-		window2->visible = 1;
+/* 		window2->visible = 1;
 		window2->focus = 1;
 		window1->focus = 0;
 		button->prelight = 0;
 		progressbar->fraction = 0.;
 		progressbar->run = 1;
-		*draw = 1;
+		*draw = 1; */
 		init_rt(rt, ui->file_path);
 		create_img(rt, sdl);
 	}
@@ -151,7 +153,7 @@ void	ui_drawing(t_rtui *ui)
 		SDL_RenderClear(ui->renderer);
 
 		kiss_window_draw(&ui->window1, ui->renderer);
-		kiss_label_draw(&ui->label1, ui->renderer);
+		//kiss_label_draw(&ui->label1, ui->renderer);
 		kiss_textbox_draw(&ui->textbox1, ui->renderer);
 		kiss_vscrollbar_draw(&ui->vscrollbar1, ui->renderer);
 		kiss_label_draw(&ui->label_sel, ui->renderer);
@@ -185,8 +187,6 @@ void	ui_init(t_rtui *ui)
 	kiss_array_append(&ui->objects, ARRAY_TYPE, &ui->a1);
 	kiss_window_new(&ui->window1, NULL, 0, 0, 0, kiss_screen_width,
 									kiss_screen_height);
-	kiss_label_new(&ui->label1, &ui->window1, "Files", ui->textbox1.rect.x + kiss_edge, \
-									ui->textbox1.rect.y - kiss_textfont.lineheight);
 	ui->label.textcolor.r = 255;
 		kiss_textbox_new(&ui->textbox1, &ui->window1, 1, &ui->a1, 30,
 									 3 * kiss_normal.h, ui->textbox_width, ui->textbox_height);
@@ -194,7 +194,7 @@ void	ui_init(t_rtui *ui)
 	kiss_vscrollbar_new(&ui->vscrollbar1, &ui->window1, ui->textbox1.rect.x + ui->textbox_width, ui->textbox1.rect.y, ui->textbox_height);
 
 	kiss_label_new(&ui->label_sel, &ui->window1, "Choose file", ui->textbox1.rect.x + kiss_edge, ui->textbox1.rect.y + ui->textbox_height + kiss_normal.h);
-	kiss_button_new(&ui->button3, &ui->window1, "deactive",
+	kiss_button_new(&ui->button3, &ui->window1, "Hide",
 									ui->window1.rect.w / 2 - kiss_normal.w / 2 - 20, 500);
 	kiss_button_new(&ui->button_ok1, &ui->window1, "render",
 									ui->window1.rect.w / 2 - kiss_normal.w / 2 - 20, 550);

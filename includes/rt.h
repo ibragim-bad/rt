@@ -53,6 +53,20 @@ typedef struct		s_trace
 	double			d;
 }					t_trace;
 
+typedef struct		s_rtui_min
+{
+	SDL_Renderer	*renderer;
+	SDL_Event		e;
+	kiss_array		objects;
+	kiss_window		window;
+	kiss_label 		label;
+	kiss_button		button;
+	char 			message[KISS_MAX_LENGTH];
+	int				draw;
+	int				quit;
+}					t_rtui_min;
+
+
 typedef struct		s_rtui
 {
 	SDL_Renderer	*renderer;
@@ -71,8 +85,7 @@ typedef struct		s_rtui
 	int				window2_height;
 	kiss_label		label;
 	kiss_label		label_buf;
-	kiss_label		label1;
-	kiss_label		label2;
+	//kiss_label		label1;
 	kiss_label		label_sel;
 	kiss_label		label_res;
 	kiss_button 	button3;
@@ -170,7 +183,8 @@ int					noise(double x, double y);
 int					wood(int x, int y);
 int					chess_board(int x, int y);
 
-void 	init_rt(t_rt *rt, char *config_file);
+void 				init_rt(t_rt *rt, char *config_file);
 int					files_ui(t_rt *rt, t_sdl *sdl);
+int					kiss_error(void);
 
 #endif

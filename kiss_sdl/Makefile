@@ -15,7 +15,7 @@ INCLUDE = -I ./ -I ../includes/frameworks/SDL2.framework/Versions/A/Headers -I .
 all: $(NAME)
 
 %.o: %.c
-	gcc $(INCLUDE) -o $@ -c $< 
+	@gcc $(INCLUDE) -o $@ -c $< 
 
 $(NAME): $(OFILES)
 	ar rcs $(NAME) $(OFILES)

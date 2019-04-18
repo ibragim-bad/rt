@@ -83,9 +83,12 @@ void	event_handler(t_rt *rt, t_sdl *sdl)
 					rt->camera = (t_vec3){0, 0, 0};
 				}
 				create_img(rt, sdl);
+				if (key == SDLK_m)
+					files_ui(rt, sdl);
 			}
 			if (event.window.event == SDL_WINDOWEVENT_RESIZED)
 				window_resized(rt, sdl, &event);
+			
 		}
 		//rt->sample++;
 		//create_img(rt, sdl);

@@ -74,7 +74,8 @@ SRC = main.c\
 	  wood.c\
 	  chess_board.c\
 	  marble.c\
-	  ui_files.c
+	  ui_files.c\
+	  ui_sup.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 SRC_LIN = $(addprefix $(SRC_DIR)/, $(SRC))
