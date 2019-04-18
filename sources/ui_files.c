@@ -112,8 +112,8 @@ static void button_ok2_event(t_rtui *ui)
 		ui->window2.visible = 0;
 		ui->window1.focus = 1;
 		ui->button_ok2.prelight = 0;
-		ui->progressbar.fraction = 0.;
-		ui->progressbar.run = 0;
+		//ui->progressbar.fraction = 0.;
+		//ui->progressbar.run = 0;
 		ui->draw = 1;
 	}
 }
@@ -188,7 +188,7 @@ int		ui_main(t_rt *rt, t_sdl *sdl)
 			//button_ok2_event(&ui); 
 		}
 		vscrollbar1_event(&ui.vscrollbar1, NULL, &ui.textbox1, &ui.draw);
-		kiss_progressbar_event(&ui.progressbar, NULL, &ui.draw);
+		//kiss_progressbar_event(&ui.progressbar, NULL, &ui.draw);
 		if (!ui.draw)
 			continue;
 		ui_drawing(&ui);
