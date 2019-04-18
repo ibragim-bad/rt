@@ -58,6 +58,7 @@ typedef struct		s_rtui
 	SDL_Renderer	*renderer;
 	SDL_Event		e;
 	kiss_array		objects;
+	kiss_array		a1;
 	kiss_window		window1, window2;
 	char			buffer[KISS_MAX_LABEL];
 	char			slash[KISS_MAX_LABEL];

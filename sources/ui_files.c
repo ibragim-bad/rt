@@ -1,28 +1,6 @@
 #include "kiss_sdl.h"
 #include "rt.h"
 
-void button_event(kiss_button *button, SDL_Event *e, int *draw,
-									int *quit, t_rt *rt, t_sdl *sdl)
-{
-	if (kiss_button_event(button, e, draw))
-	{
-		//*quit = 1;
-		init_rt(rt, "parser/sph2.json");
-		create_img(rt, sdl);
-	}
-}
-
-void button_event2(kiss_button *button, SDL_Event *e, int *draw,
-									 int *quit, t_rt *rt, t_sdl *sdl)
-{
-	if (kiss_button_event(button, e, draw))
-	{
-		//*quit = 1;
-		init_rt(rt, "parser/sphere.json");
-		create_img(rt, sdl);
-	}
-}
-
 void button_event3(kiss_button *button, SDL_Event *e, int *draw,
 									 int *quit)
 {
@@ -77,8 +55,6 @@ static void dirent_read(kiss_textbox *textbox1, kiss_vscrollbar *vscrollbar1, ki
 	strcpy(ending, "/");
 	if (ui->buffer[0] == 'C') strcpy(ending, "\\");
 	if (!strcmp(ui->buffer, "/") || !strcmp(ui->buffer, "C:\\")) strcpy(ending, "");
- //	kiss_string_copy(label_sel->text, (2 * textbox1->rect.w +
-//		2 * kiss_up.w) / kiss_textfont.advance, ui->buffer, ending); 
 	dir = kiss_opendir(".");
 	//printf("buffer - %s\n", ui->buffer);
 	while ((ent = kiss_readdir(dir)))
@@ -200,16 +176,19 @@ void	ui_init(t_rtui *ui)
 	ui->window2_height = 168;
 	ui->quit = 0;
 	ui->draw = 1;
-	kiss_array_new(&ui->objects);
+	//kiss_array_new(&ui->objects);
 	ui->renderer = kiss_init("RT", &ui->objects, 300, 600);
+
 	if (!ui->renderer)
 		return ;
+	kiss_array_new(&ui->a1);
+	kiss_array_append(&ui->objects, ARRAY_TYPE, &ui->a1);
 	kiss_window_new(&ui->window1, NULL, 0, 0, 0, kiss_screen_width,
 									kiss_screen_height);
 	kiss_label_new(&ui->label1, &ui->window1, "Files", ui->textbox1.rect.x + kiss_edge, \
 									ui->textbox1.rect.y - kiss_textfont.lineheight);
 	ui->label.textcolor.r = 255;
-		kiss_textbox_new(&ui->textbox1, &ui->window1, 1, &ui->objects, 30,
+		kiss_textbox_new(&ui->textbox1, &ui->window1, 1, &ui->a1, 30,
 									 3 * kiss_normal.h, ui->textbox_width, ui->textbox_height);
 
 	kiss_vscrollbar_new(&ui->vscrollbar1, &ui->window1, ui->textbox1.rect.x + ui->textbox_width, ui->textbox1.rect.y, ui->textbox_height);
