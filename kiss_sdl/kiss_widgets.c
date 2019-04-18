@@ -666,7 +666,7 @@ int kiss_textbox_new(kiss_textbox *textbox, kiss_window *wdw, int decorate,
 	if (h - 2 * kiss_border < textbox->font.lineheight) return -1;
 	textbox->bg = kiss_white;
 	textbox->textcolor = kiss_black;
-	textbox->hlcolor = kiss_blue;
+	textbox->hlcolor = kiss_lightblue;
 	kiss_makerect(&textbox->rect, x, y, w, h);
 	kiss_makerect(&textbox->textrect, x + kiss_border,
 		y + kiss_border, w - 2 * kiss_border, h - 2 * kiss_border);

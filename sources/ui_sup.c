@@ -1,8 +1,7 @@
 #include "kiss_sdl.h"
 #include "rt.h"
 
-void	button_event(kiss_button *button, SDL_Event *e, int *draw,
-				  int *quit)
+void	button_event(kiss_button *button, SDL_Event *e, int *draw, int *quit)
 {
 	if (kiss_button_event(button, e, draw))
 		*quit = 1;
@@ -19,45 +18,23 @@ void	ui_min_init(t_rtui_min *min)
 	kiss_window_new(&min->window, NULL, 0, 0, 0, kiss_screen_width,
 					kiss_screen_height);
 	strcpy(min->message, "incorrect file!");
-	kiss_label_new(&min->label, &min->window, min->message,
-				   min->window.rect.w / 2 - strlen(min->message) *
-										   kiss_textfont.advance / 2,
-				   min->window.rect.h / 2 - (kiss_textfont.fontheight + 2 * kiss_normal.h) / 2);
+	kiss_label_new(&min->label, &min->window, min->message, \
+		min->window.rect.w / 2 - strlen(min->message) * \
+		kiss_textfont.advance / 2, \
+		min->window.rect.h / 2 - (kiss_textfont.fontheight\
+		+ 2 * kiss_normal.h) / 2);
 	min->label.textcolor.r = 255;
 	kiss_button_new(&min->button, &min->window, "OK",
-					min->window.rect.w / 2 - kiss_normal.w / 2, min->label.rect.y + kiss_textfont.fontheight + kiss_normal.h);
+			min->window.rect.w / 2 - kiss_normal.w / 2, \
+			min->label.rect.y + kiss_textfont.fontheight + kiss_normal.h);
 	min->window.visible = 1;
 }
 
 int		kiss_error(void)
 {
 	t_rtui_min	min;
-	/* SDL_Renderer *renderer;
-	SDL_Event e;
-	kiss_array objects;
-	kiss_window window;
-	kiss_label label = {0};
-	kiss_button button = {0};
-	char message[KISS_MAX_LENGTH];
-	int draw, quit; */
+
 	ui_min_init(&min);
-/* 	min.quit = 0;
-	min.draw = 1;
-	kiss_array_new(&min.objects);
-	min.renderer = kiss_init("ERROR", &min.objects, 320, 120);
-	if (!min.renderer)
-		return 1;
-	kiss_window_new(&min.window, NULL, 0, 0, 0, kiss_screen_width,
-					kiss_screen_height);
-	strcpy(min.message, "incorrect file!");
-	kiss_label_new(&min.label, &min.window, min.message,
-				   min.window.rect.w / 2 - strlen(min.message) *
-										   kiss_textfont.advance / 2,
-				   min.window.rect.h / 2 - (kiss_textfont.fontheight + 2 * kiss_normal.h) / 2);
-	min.label.textcolor.r = 255;
-	kiss_button_new(&min.button, &min.window, "OK",
-					min.window.rect.w / 2 - kiss_normal.w / 2, min.label.rect.y + kiss_textfont.fontheight + kiss_normal.h);
-	min.window.visible = 1; */
 	while (!min.quit)
 	{
 		SDL_Delay(10);

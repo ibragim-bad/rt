@@ -15,12 +15,14 @@
 
 static int init_sdl(t_sdl *sdl)
 {
+	SDL_Surface *wall;
+	
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
 		printf("SDL_Init Error: %s\n", SDL_GetError());
 		return (1);
 	}
-	sdl->win = SDL_CreateWindow("RT", 530, 420, 600, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+	sdl->win = SDL_CreateWindow("RT", 485, 420, 600, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	if (sdl->win == NULL)
 	{
 		printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
@@ -32,7 +34,10 @@ static int init_sdl(t_sdl *sdl)
 		printf("SDL_GetWindowSurface Error: %s\n", SDL_GetError());
 		return (1);
 	}
-
+	wall = SDL_LoadBMP("textures/brick.bmp");
+	SDL_BlitScaled(wall, NULL, sdl->surf, NULL);
+	SDL_FreeSurface(wall);
+	SDL_UpdateWindowSurface(sdl->win);
 	sdl->img_data = (int *)sdl->surf->pixels;
 	return (0);
 }
@@ -92,7 +97,7 @@ void init_rt(t_rt *rt, char *config_file)
 	rt->win_width = 600;
 	rt->win_height = 600;
 }
-
+/* 
 void	rt_menu(void)
 {
 	SDL_Window	*win;
@@ -111,7 +116,7 @@ void	rt_menu(void)
 	//draw_string("7) Rate of this project can be only above 100.", color_bold, 490, sur);
 	SDL_UpdateWindowSurface(win);
 	TTF_Quit();
-}
+} */
 
 int main(int args, char **argv)
 {
@@ -125,10 +130,10 @@ int main(int args, char **argv)
 		return (1);
 	}
 	generateNoise();
-	init_rt(&rt, argv[1]);
+	//init_rt(&rt, argv[1]);
 	if (init_sdl(&sdl))
 		return (1);
-	create_img(&rt, &sdl);
+	//create_img(&rt, &sdl);
 	//rt_menu();
 
 	files_ui(&rt, &sdl);

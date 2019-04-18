@@ -183,8 +183,10 @@ int					noise(double x, double y);
 int					wood(int x, int y);
 int					chess_board(int x, int y);
 
+void				dirent_read(t_rtui *ui);
 void 				init_rt(t_rt *rt, char *config_file);
 int					files_ui(t_rt *rt, t_sdl *sdl);
 int					kiss_error(void);
+void				ui_init(t_rtui *ui);
 
 #endif

@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "kiss_sdl.h": "c",
-        "ratio": "c"
+        "ratio": "c",
+        "__tuple": "c"
     }
 }
