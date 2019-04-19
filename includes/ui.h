@@ -32,7 +32,6 @@ typedef struct		s_rtui
 	kiss_array		a1;
 	kiss_window		window1;
 	kiss_window		window2;
-	kiss_window		window3;
 	char			buffer[KISS_MAX_LABEL];
 	char			slash[KISS_MAX_LABEL];
 	char			file_path[KISS_MAX_LABEL];
@@ -42,21 +41,18 @@ typedef struct		s_rtui
 	int				textbox_height;
 	int				window2_width;
 	int				window2_height;
-	int				window3_width;
-	int				window3_height;
 	kiss_label		label;
 	kiss_label		label3;
 	kiss_label		label_buf;
 	kiss_label		label_sel;
 	kiss_label		label_res;
-	kiss_button 	button3;
+	kiss_button 	button_hide;
 	kiss_button		button_light;
 	kiss_button		button_light_ok;
 	kiss_button 	button_ex;
 	kiss_button 	button_ok1;
 	kiss_button 	button_ok2;
 	kiss_vscrollbar vscrollbar1;
-	//kiss_progressbar progressbar;
 	kiss_textbox	textbox1;
 }					t_rtui;
 

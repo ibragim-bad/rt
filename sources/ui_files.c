@@ -24,12 +24,11 @@ void	button_event3(kiss_button *button, SDL_Event *e, int *draw,
 	}
 }
 
-void		button_event_exit(kiss_button *button, SDL_Event *e, int *draw,
-									 int *quit, t_rt *rt, t_sdl *sdl)
+void		button_event_exit(t_rtui *ui, t_rt *rt, t_sdl *sdl)
 {
-	if (kiss_button_event(button, e, draw))
+	if (kiss_button_event(&ui->button_ex, &ui->e, &ui->draw))
 	{
-		*quit = 1;
+		ui->quit = 1;
 		
 		if (rt->win_width)
 			free_args(rt->head_shapes, rt->head_light, rt->head_textures);
@@ -75,48 +74,12 @@ static void textbox1_event(kiss_textbox *textbox1, SDL_Event *e, t_rtui	*ui)
 		}
 	}
 }
-/* static void textbox1_event(t_rtui	*ui)
-{
-	int index;
-
-	if (kiss_textbox_event(&ui->textbox1, &ui->e, &ui->draw))
-	{
-		index = ui->textbox1.firstline + ui->textbox1.selectedline;
-		if (ft_strcmp((char *)kiss_array_data(ui->textbox1.array, index), ""))
-		{
-			ui->textbox1.selectedline = -1;
-			kiss_chdir((char *)kiss_array_data(ui->textbox1.array, index));
-			kiss_string_copy(ui->slash,
-				KISS_MAX_LABEL,
-				ui->buffer, "/");
-			kiss_string_copy(ui->file_path,
-				KISS_MAX_LABEL,
-				ui->slash, (char *)kiss_array_data(ui->textbox1.array,
-				index));
-			kiss_string_copy(ui->label_sel.text,
-				KISS_MAX_LABEL,
-				(char *) kiss_array_data(ui->textbox1.array,
-				index), NULL);
-			if (ui->file_path[ft_strlen(ui->file_path) - 1] == '/')
-				dirent_read(ui);
-			ui->draw = 1;
-		}
-	}
-} */
 
 static void button_light_event(t_rtui *ui, t_rt *rt)
 {
 	if (kiss_button_event(&ui->button_light, &ui->e, &ui->draw))
 	{
 		kiss_light(rt);
-		//ui->window3.visible = 1;
-		//ui->window3.focus = 1;
-		//ui->window1.focus = 0;
-		//ui->button_light.prelight = 0;
-		/*progressbar->fraction = 0.;
-		progressbar->run = 1;
-		*draw = 1; */
-		//ui->draw = 1;
 	}
 }
 
@@ -127,8 +90,6 @@ static void button_close_win(kiss_button *button, t_rtui *ui)
 		ui->window2.visible = 0;
 		ui->window1.focus = 1;
 		ui->button_ok2.prelight = 0;
-		//ui->progressbar.fraction = 0.;
-		//ui->progressbar.run = 0;
 		ui->draw = 1;
 	}
 }
@@ -144,19 +105,6 @@ static void button_ok1_event(t_rtui *ui, t_rt *rt, t_sdl *sdl)
 			kiss_error("should be \".json\"");
 			return ;
 		}
-	/* 		kiss_string_copy(buf, kiss_maxlength(kiss_textfont,
-			window2->rect.w - 2 * kiss_vslider.w,
-			label_sel->text, entry->text),
-			label_sel->text, entry->text); */
-		kiss_string_copy(ui->label_res.text, KISS_MAX_LABEL, 
-			"Wait\n", ""); 
-/* 		window2->visible = 1;
-		window2->focus = 1;
-		window1->focus = 0;
-		button->prelight = 0;
-		progressbar->fraction = 0.;
-		progressbar->run = 1;
-		*draw = 1; */
 		init_rt(rt, ui->file_path);
 		create_img(rt, sdl);
 	}
@@ -172,18 +120,11 @@ void	ui_drawing(t_rtui *ui, t_rt *rt)
 	kiss_label_draw(&ui->label_sel, ui->renderer);
 	if (rt->win_width)
 	{
-		kiss_button_draw(&ui->button3, ui->renderer);
+		kiss_button_draw(&ui->button_hide, ui->renderer);
 		kiss_button_draw(&ui->button_light, ui->renderer);
 	}
 	kiss_button_draw(&ui->button_ex, ui->renderer);
 	kiss_button_draw(&ui->button_ok1, ui->renderer);
-	kiss_window_draw(&ui->window3, ui->renderer);
-	kiss_label_draw(&ui->label3, ui->renderer);
-	//kiss_button_draw(&ui->button_light_ok, ui->renderer);
-	/* kiss_window_draw(&ui->window2, ui->renderer);
-	kiss_label_draw(&ui->label_res, ui->renderer);
-	kiss_progressbar_draw(&ui->progressbar, ui->renderer);
-	kiss_button_draw(&ui->button_ok2, ui->renderer); */
 	SDL_RenderPresent(ui->renderer);
 	ui->draw = 0;
 }
@@ -201,17 +142,14 @@ int		ui_main(t_rt *rt, t_sdl *sdl)
 			if (ui.e.type == SDL_QUIT)
 				ui.quit = 1;
 			kiss_window_event(&ui.window1, &ui.e, &ui.draw);
-			//kiss_window_event(&ui.window2, &ui.e, &ui.draw);
 			vscrollbar1_event(&ui.vscrollbar1, &ui.e, &ui.textbox1, &ui.draw);
 			textbox1_event(&ui.textbox1, &ui.e, &ui);
-			button_event3(&ui.button3, &ui.e, &ui.draw, &ui.quit, rt);
-			button_event_exit(&ui.button_ex, &ui.e, &ui.draw, &ui.quit, rt, sdl);
+			button_event3(&ui.button_hide, &ui.e, &ui.draw, &ui.quit, rt);
+			button_event_exit(&ui, rt, sdl);
  			button_ok1_event(&ui, rt, sdl);
 			button_light_event(&ui, rt);
-			button_close_win(&ui.button_light_ok, &ui);
 		}
 		vscrollbar1_event(&ui.vscrollbar1, NULL, &ui.textbox1, &ui.draw);
-		//kiss_progressbar_event(&ui.progressbar, NULL, &ui.draw);
 		if (!ui.draw)
 			continue;
 		ui_drawing(&ui, rt);
