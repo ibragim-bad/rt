@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "kiss_sdl.h"
 #include "rt.h"
 
 void	button_event3(kiss_button *button, SDL_Event *e, int *draw,
@@ -105,9 +104,25 @@ static void textbox1_event(kiss_textbox *textbox1, SDL_Event *e, t_rtui	*ui)
 	}
 } */
 
-static void button_ok2_event(t_rtui *ui)
+static void button_light_event(t_rtui *ui, t_rt *rt)
 {
-	if (kiss_button_event(&ui->button_ok2, &ui->e, &ui->draw))
+	if (kiss_button_event(&ui->button_light, &ui->e, &ui->draw))
+	{
+		kiss_light(rt);
+		//ui->window3.visible = 1;
+		//ui->window3.focus = 1;
+		//ui->window1.focus = 0;
+		//ui->button_light.prelight = 0;
+		/*progressbar->fraction = 0.;
+		progressbar->run = 1;
+		*draw = 1; */
+		//ui->draw = 1;
+	}
+}
+
+static void button_close_win(kiss_button *button, t_rtui *ui)
+{
+	if (kiss_button_event(button, &ui->e, &ui->draw))
 	{
 		ui->window2.visible = 0;
 		ui->window1.focus = 1;
@@ -147,7 +162,7 @@ static void button_ok1_event(t_rtui *ui, t_rt *rt, t_sdl *sdl)
 	}
 }
 
-void	ui_drawing(t_rtui *ui)
+void	ui_drawing(t_rtui *ui, t_rt *rt)
 {
 
 	SDL_RenderClear(ui->renderer);
@@ -155,9 +170,16 @@ void	ui_drawing(t_rtui *ui)
 	kiss_textbox_draw(&ui->textbox1, ui->renderer);
 	kiss_vscrollbar_draw(&ui->vscrollbar1, ui->renderer);
 	kiss_label_draw(&ui->label_sel, ui->renderer);
-	kiss_button_draw(&ui->button3, ui->renderer);
+	if (rt->win_width)
+	{
+		kiss_button_draw(&ui->button3, ui->renderer);
+		kiss_button_draw(&ui->button_light, ui->renderer);
+	}
 	kiss_button_draw(&ui->button_ex, ui->renderer);
 	kiss_button_draw(&ui->button_ok1, ui->renderer);
+	kiss_window_draw(&ui->window3, ui->renderer);
+	kiss_label_draw(&ui->label3, ui->renderer);
+	//kiss_button_draw(&ui->button_light_ok, ui->renderer);
 	/* kiss_window_draw(&ui->window2, ui->renderer);
 	kiss_label_draw(&ui->label_res, ui->renderer);
 	kiss_progressbar_draw(&ui->progressbar, ui->renderer);
@@ -185,13 +207,14 @@ int		ui_main(t_rt *rt, t_sdl *sdl)
 			button_event3(&ui.button3, &ui.e, &ui.draw, &ui.quit, rt);
 			button_event_exit(&ui.button_ex, &ui.e, &ui.draw, &ui.quit, rt, sdl);
  			button_ok1_event(&ui, rt, sdl);
-			//button_ok2_event(&ui); 
+			button_light_event(&ui, rt);
+			button_close_win(&ui.button_light_ok, &ui);
 		}
 		vscrollbar1_event(&ui.vscrollbar1, NULL, &ui.textbox1, &ui.draw);
 		//kiss_progressbar_event(&ui.progressbar, NULL, &ui.draw);
 		if (!ui.draw)
 			continue;
-		ui_drawing(&ui);
+		ui_drawing(&ui, rt);
 	}
 	kiss_clean(&ui.objects);
 	return 0;

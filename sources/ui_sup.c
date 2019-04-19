@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "kiss_sdl.h"
 #include "rt.h"
 
 void	button_event(kiss_button *button, SDL_Event *e, int *draw, int *quit)

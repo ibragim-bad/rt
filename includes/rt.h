@@ -21,6 +21,7 @@
 # include <SDL_ttf.h>
 # include "kiss_sdl.h"
 # include "shape.h"
+# include "ui.h"
 # include <math.h>
 # include <limits.h>
 # include <fcntl.h>
@@ -52,49 +53,6 @@ typedef struct		s_trace
 	double			t;
 	double			d;
 }					t_trace;
-
-typedef struct		s_rtui_min
-{
-	SDL_Renderer	*renderer;
-	SDL_Event		e;
-	kiss_array		objects;
-	kiss_window		window;
-	kiss_label 		label;
-	kiss_button		button;
-	char 			message[KISS_MAX_LENGTH];
-	int				draw;
-	int				quit;
-}					t_rtui_min;
-
-
-typedef struct		s_rtui
-{
-	SDL_Renderer	*renderer;
-	SDL_Event		e;
-	kiss_array		objects;
-	kiss_array		a1;
-	kiss_window		window1, window2;
-	char			buffer[KISS_MAX_LABEL];
-	char			slash[KISS_MAX_LABEL];
-	char			file_path[KISS_MAX_LABEL];
-	int				draw;
-	int				quit;
-	int				textbox_width;
-	int				textbox_height;
-	int				window2_width;
-	int				window2_height;
-	kiss_label		label;
-	kiss_label		label_buf;
-	kiss_label		label_sel;
-	kiss_label		label_res;
-	kiss_button 	button3;
-	kiss_button 	button_ex;
-	kiss_button 	button_ok1;
-	kiss_button 	button_ok2;
-	kiss_vscrollbar vscrollbar1;
-	//kiss_progressbar progressbar;
-	kiss_textbox	textbox1;
-}					t_rtui;
 
 typedef struct		s_rt
 {
@@ -188,5 +146,6 @@ void				dirent_read(t_rtui *ui);
 void 				init_rt(t_rt *rt, char *config_file);
 int					kiss_error(char *mes);
 void				ui_init(t_rtui *ui);
+int					kiss_light(t_rt *rt);
 
 #endif

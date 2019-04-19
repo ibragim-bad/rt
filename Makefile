@@ -77,7 +77,8 @@ SRC = main.c\
 	  ui_files.c\
 	  ui_sup.c\
 	  ui_dirread.c\
-	  ui_init.c
+	  ui_init.c\
+	  ui_light.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 SRC_LIN = $(addprefix $(SRC_DIR)/, $(SRC))
@@ -116,7 +117,7 @@ $(OBJ_DIR):
 	@echo "$(GREEN)Objects directory is created!$(NC)"
 	@mkdir -p $(OBJ_DIR)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c includes/rt.h includes/shape.h includes/constants.h includes/vector.h| $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c includes/rt.h includes/shape.h includes/constants.h includes/vector.h includes/ui.h| $(OBJ_DIR)
 	@gcc $(FLAGS) $(INCLUDES) -o $@ -c $<  -F includes/frameworks/
 
 clean:
