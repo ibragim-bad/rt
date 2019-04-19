@@ -74,8 +74,8 @@ SRC = main.c\
 	  wood.c\
 	  chess_board.c\
 	  marble.c\
-	  ui_files.c\
-	  ui_sup.c\
+	  ui_main.c\
+	  ui_error.c\
 	  ui_dirread.c\
 	  ui_init.c\
 	  ui_light.c\

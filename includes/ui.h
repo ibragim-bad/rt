@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ui.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jfrankly <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/19 16:00:45 by jfrankly          #+#    #+#             */
+/*   Updated: 2019/04/19 16:00:46 by jfrankly         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef UI_H
 # define UI_H
 
@@ -7,7 +19,7 @@ typedef struct		s_rtui_min
 	SDL_Event		e;
 	kiss_array		objects;
 	kiss_window		window;
-	kiss_label 		label;
+	kiss_label		label;
 	kiss_button		button;
 	kiss_entry		en_x;
 	kiss_entry		en_y;
@@ -18,11 +30,10 @@ typedef struct		s_rtui_min
 	kiss_label		label_z;
 	kiss_label		label_intens;
 	t_vec3			pos_light;
-	char 			message[KISS_MAX_LENGTH];
+	char			message[KISS_MAX_LENGTH];
 	int				draw;
 	int				quit;
 }					t_rtui_min;
-
 
 typedef struct		s_rtui
 {
@@ -46,12 +57,12 @@ typedef struct		s_rtui
 	kiss_label		label_buf;
 	kiss_label		label_sel;
 	kiss_label		label_res;
-	kiss_button 	button_hide;
+	kiss_button		button_hide;
 	kiss_button		button_light;
 	kiss_button		button_light_ok;
-	kiss_button 	button_ex;
-	kiss_button 	button_ok1;
-	kiss_button 	button_ok2;
+	kiss_button		button_ex;
+	kiss_button		button_ok1;
+	kiss_button		button_ok2;
 	kiss_vscrollbar vscrollbar1;
 	kiss_textbox	textbox1;
 }					t_rtui;

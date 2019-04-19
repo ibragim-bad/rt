@@ -26,7 +26,7 @@
 # include <limits.h>
 # include <fcntl.h>
 # include <stdio.h>
-#include <time.h> 
+# include <time.h> 
 
 typedef struct		s_sdl
 {
@@ -143,7 +143,7 @@ int					chess_board(int x, int y);
 
 int					ui_main(t_rt *rt, t_sdl *sdl);
 void				dirent_read(t_rtui *ui);
-void 				init_rt(t_rt *rt, char *config_file);
+void				init_rt(t_rt *rt, char *config_file);
 int					kiss_error(char *mes);
 void				ui_init(t_rtui *ui);
 int					kiss_light(t_rt *rt);

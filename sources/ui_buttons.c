@@ -12,7 +12,7 @@
 
 #include "rt.h"
 
-void button_event_hide(t_rtui *ui)
+static void	button_event_hide(t_rtui *ui)
 {
 	if (kiss_button_event(&ui->button_hide, &ui->e, &ui->draw))
 	{
@@ -20,12 +20,11 @@ void button_event_hide(t_rtui *ui)
 	}
 }
 
-void button_event_exit(t_rtui *ui, t_rt *rt, t_sdl *sdl)
+static void	button_event_exit(t_rtui *ui, t_rt *rt, t_sdl *sdl)
 {
 	if (kiss_button_event(&ui->button_ex, &ui->e, &ui->draw))
 	{
 		ui->quit = 1;
-
 		if (rt->win_width)
 			free_args(rt->head_shapes, rt->head_light, rt->head_textures);
 		SDL_DestroyWindow(sdl->win);
@@ -34,7 +33,7 @@ void button_event_exit(t_rtui *ui, t_rt *rt, t_sdl *sdl)
 	}
 }
 
-static void button_light_event(t_rtui *ui, t_rt *rt)
+static void	button_light_event(t_rtui *ui, t_rt *rt)
 {
 	if (kiss_button_event(&ui->button_light, &ui->e, &ui->draw))
 	{
@@ -42,7 +41,7 @@ static void button_light_event(t_rtui *ui, t_rt *rt)
 	}
 }
 
-static void button_ok1_event(t_rtui *ui, t_rt *rt, t_sdl *sdl)
+static void	button_ok1_event(t_rtui *ui, t_rt *rt, t_sdl *sdl)
 {
 	char buf[KISS_MAX_LENGTH];
 
@@ -51,14 +50,14 @@ static void button_ok1_event(t_rtui *ui, t_rt *rt, t_sdl *sdl)
 		if (!(ft_strstr(ui->label_sel.text, ".json")))
 		{
 			kiss_error("should be \".json\"");
-			return;
+			return ;
 		}
 		init_rt(rt, ui->file_path);
 		create_img(rt, sdl);
 	}
 }
 
-void button_events_main(t_rtui *ui, t_rt *rt, t_sdl *sdl)
+void		button_events_main(t_rtui *ui, t_rt *rt, t_sdl *sdl)
 {
 	button_event_hide(ui);
 	button_event_exit(ui, rt, sdl);

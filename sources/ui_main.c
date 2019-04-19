@@ -12,9 +12,8 @@
 
 #include "rt.h"
 
-
-static void vscrollbar1_event(kiss_vscrollbar *vscrollbar, SDL_Event *e,
-							  kiss_textbox *textbox1, int *draw)
+static void	vscrollbar1_event(kiss_vscrollbar *vscrollbar, SDL_Event *e,
+								kiss_textbox *textbox1, int *draw)
 {
 	int firstline;
 
@@ -22,16 +21,14 @@ static void vscrollbar1_event(kiss_vscrollbar *vscrollbar, SDL_Event *e,
 		textbox1->array->length - textbox1->maxlines > 0)
 	{
 		firstline = (int)((textbox1->array->length -
-						   textbox1->maxlines) *
-							  vscrollbar->fraction +
-						  0.5);
+							textbox1->maxlines) * vscrollbar->fraction + 0.5);
 		if (firstline >= 0)
 			textbox1->firstline = firstline;
 		*draw = 1;
 	}
 }
 
-static void textbox1_event(kiss_textbox *textbox1, SDL_Event *e, t_rtui *ui)
+static void	textbox1_event(kiss_textbox *textbox1, SDL_Event *e, t_rtui *ui)
 {
 	int index;
 
@@ -43,9 +40,9 @@ static void textbox1_event(kiss_textbox *textbox1, SDL_Event *e, t_rtui *ui)
 			ui->textbox1.selectedline = -1;
 			kiss_string_copy(ui->slash, KISS_MAX_LABEL, ui->buffer, "/");
 			kiss_string_copy(ui->file_path, KISS_MAX_LABEL,
-							 ui->slash, (char *)kiss_array_data(ui->textbox1.array, index));
+				ui->slash, (char *)kiss_array_data(ui->textbox1.array, index));
 			kiss_string_copy(ui->label_sel.text, KISS_MAX_LABEL,
-							 (char *)kiss_array_data(ui->textbox1.array, index), NULL);
+				(char *)kiss_array_data(ui->textbox1.array, index), NULL);
 			kiss_chdir((char *)kiss_array_data(ui->textbox1.array, index));
 			if (ui->file_path[ft_strlen(ui->file_path) - 1] == '/')
 				dirent_read(ui);
@@ -54,9 +51,8 @@ static void textbox1_event(kiss_textbox *textbox1, SDL_Event *e, t_rtui *ui)
 	}
 }
 
-void ui_drawing(t_rtui *ui, t_rt *rt)
+static void	ui_drawing(t_rtui *ui, t_rt *rt)
 {
-
 	SDL_RenderClear(ui->renderer);
 	kiss_window_draw(&ui->window1, ui->renderer);
 	kiss_textbox_draw(&ui->textbox1, ui->renderer);
@@ -73,7 +69,7 @@ void ui_drawing(t_rtui *ui, t_rt *rt)
 	ui->draw = 0;
 }
 
-int ui_main(t_rt *rt, t_sdl *sdl)
+int			ui_main(t_rt *rt, t_sdl *sdl)
 {
 	t_rtui ui;
 
@@ -88,7 +84,6 @@ int ui_main(t_rt *rt, t_sdl *sdl)
 			kiss_window_event(&ui.window1, &ui.e, &ui.draw);
 			vscrollbar1_event(&ui.vscrollbar1, &ui.e, &ui.textbox1, &ui.draw);
 			textbox1_event(&ui.textbox1, &ui.e, &ui);
-
 			button_events_main(&ui, rt, sdl);
 		}
 		vscrollbar1_event(&ui.vscrollbar1, NULL, &ui.textbox1, &ui.draw);
@@ -97,5 +92,5 @@ int ui_main(t_rt *rt, t_sdl *sdl)
 		ui_drawing(&ui, rt);
 	}
 	kiss_clean(&ui.objects);
-	return 0;
+	return (0);
 }
