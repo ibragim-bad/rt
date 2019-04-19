@@ -147,5 +147,6 @@ void 				init_rt(t_rt *rt, char *config_file);
 int					kiss_error(char *mes);
 void				ui_init(t_rtui *ui);
 int					kiss_light(t_rt *rt);
+void				button_events_main(t_rtui *ui, t_rt *rt, t_sdl *sdl);
 
 #endif

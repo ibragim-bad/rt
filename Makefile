@@ -78,7 +78,8 @@ SRC = main.c\
 	  ui_sup.c\
 	  ui_dirread.c\
 	  ui_init.c\
-	  ui_light.c
+	  ui_light.c\
+	  ui_buttons.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 SRC_LIN = $(addprefix $(SRC_DIR)/, $(SRC))
